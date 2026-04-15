@@ -1,7 +1,3 @@
-let navbar = document.getElementById("navbar");
-let cardProducto = document.getElementById("cardProducto");
-
-
 const hamburguesas = [
   {
     id: 1,
@@ -40,13 +36,21 @@ const contenedorHamburguesas = document.getElementById(
   "contenedor-hamburguesas",
 );
 
+let carrito = conocerDatosStorage();
+
 renderizarTarjeta(hamburguesas);
+renderizarCarritoHTML();
 //funcion para mostrar el array de hamburguesas
 function renderizarTarjeta(productos) {
+  //limpiamos el contenedor
   contenedorHamburguesas.innerHTML = "";
+  //se define un foreach para recorrer cada producto e renderizarlo con el dom
   productos.forEach((hamburguesa) => {
+    //creamos cada elemento
     let columnaDiv = document.createElement("div");
+    //añadimos a la clase las columnas por card
     columnaDiv.classList.add("col-md-3");
+    //insertamos al elemento creado la estructura
     columnaDiv.innerHTML = `
             <div class="card text-center p-3 tienda__categoria-card">
                 <div class="card-body">
@@ -58,33 +62,90 @@ function renderizarTarjeta(productos) {
                     </button>
                 </div>
             </div>`;
+    //insertamos por el DOM el elemento creado
     contenedorHamburguesas.appendChild(columnaDiv);
   });
 }
-
-
-// Inicializar el carrito desde localStorage o dejarlo limpo 
-let carrito = JSON.parse(localStorage.getItem("carrito_burguer")) || [];
-
-// Función para agregar productos al carrito 
+//agregamos funcion para el boton de agregar de cada card
 function agregarAlCarrito(id) {
-    const producto = hamburguesas.find((h) => h.id === id);
-    if (producto) {
-        carrito.push(producto);
-        actualizarNavbar();
-        guardarEnLocalStorage();
-    }
+  //creamos una variable el array y va aguardar el primer elemento que tenga el mismo id en el array con el metodo find.
+  const hamburguesaAgregada = hamburguesas.find(
+    (hamburguesa) => hamburguesa.id === id,
+  );
+  //agrega el elemento selecciona en elarray de carrito
+  carrito.push(hamburguesaAgregada);
+  console.log(
+    "la hamburguesa agregada es: " + JSON.stringify(hamburguesaAgregada),
+  );
+  //guardamos el elemento agregado en el array carrito en el storage con setItem
+  localStorage.setItem("carrito", JSON.stringify(carrito));
+  console.log("el carrito es: " + carrito);
+  actualizarNavbar();
+  renderizarCarritoHTML(JSON.stringify(carrito));
+  console.log("revisar omeee");
+}
+
+//funcion que obtiene el carrito guardado en local storage
+function conocerDatosStorage() {
+  //variable para traer los datos que haya en storage
+  let datosStorage = localStorage.getItem("carrito");
+
+  //se valida de que existan datos, sí existen se realiza parseo de JSON a objeto y lo retorna
+  if (datosStorage) {
+    dato = JSON.parse(datosStorage);
+    console.log(typeof dato);
+    return dato;
+    // si esta vacio retorna array vacio de carrito
+  } else {
+    return [];
+  }
+}
+
+function renderizarCarritoHTML() {
+  const listaCarrito = document.getElementById("lista-carrito");
+  listaCarrito.innerHTML = "";
+  //junto al
+  carrito.forEach((hamburguesa, index) => {
+    let li = document.createElement("li");
+    li.innerHTML = `
+    <div class="d-flex justify-content-between"> 
+        <div>
+            ${hamburguesa.nombre}  $${hamburguesa.precio}
+            <button type="button" class="btn-eliminar" onclick="eliminarProductos(${index})">eliminar</button>
+        </div>
+        
+    </div>
+`; //aquí acabamos de crear la lista y tambien el botón de eliminar.
+    console.log("ya se creó, vamos bien.");
+
+    listaCarrito.appendChild(li);
+  });
 }
 
 function actualizarNavbar() {
-    const badge = document.querySelector(".tienda__cart-badge");
-    if (badge) {
-        badge.innerText = carrito.length;
+  let indicador = document.querySelector(".tienda__cart-badge");
+
+  if (indicador) {
+    let cantidadCarrito = carrito.length;
+    console.log(cantidadCarrito);
+
+    indicador.innerHTML = carrito.length;
+    if (carrito.length === 0) {
+      indicador.style.display = "none";
+    } else {
+      indicador.style.display = "inline-block";
     }
+  }
 }
 
-function guardarEnLocalStorage() {
-    localStorage.setItem("carrito_burguer", JSON.stringify(carrito));
+function eliminarProductos(indice) {
+  //tengo que tomar el indice y pedirle que llame del localStorage y elimine el producto.
+  carrito.splice(indice, 1);
+  localStorage.setItem("carrito", JSON.stringify(carrito));
+  //ahora se cumple el eliminar de renderizarCarrito con el onclick
+  renderizarCarritoHTML();
+  actualizarNavbar();
 }
+
 
 actualizarNavbar();
