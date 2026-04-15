@@ -3,55 +3,54 @@ const hamburguesas = [
     id: 1,
     nombre: "La Colombiana",
     precio: 25000,
-    img: "",
+    img: "../assets/mega-stack.png",
     descripcion:
-      "La hamburguesa que sabe a Colombia Jugosa carne Angus a la parrilla, acompañada de dulce plátano maduro, un huevo frito, lechuga fresca, tomate y cebolla",
+      "La hamburguesa que sabe a Colombia: Carne Angus, plátano maduro, huevo frito y vegetales.",
   },
   {
     id: 2,
     nombre: "La Mexicana",
     precio: 25000,
-    img: "",
+    img: "assets/double-beast.png",
     descripcion:
-      "Hamburguesa de res 110 g, pollo desmechado, carne de cerdo, jamón, tocineta, chorizo, guacamole, con queso mozzarella, vegetales frescos  ",
+      "Res, pollo desmechado, cerdo, jamón, tocineta, chorizo y guacamole.",
   },
   {
     id: 3,
     nombre: "Crispy Burger",
     precio: 25000,
-    img: "",
-    descripcion:
-      "Hamburguesa con 120 gr de carne 100% de res, queso cheddar, cebollas crocantes y salsas de la ",
+    img: "assets/golden-crunch-hero.png",
+    descripcion: "120g de carne de res, queso cheddar y cebollas crocantes.",
   },
   {
     id: 4,
     nombre: "Cheese Burger",
     precio: 22000,
-    img: "",
+    img: "assets/full-stack.png",
     descripcion:
-      "Hamburguesa con 120 gr. de carne 100% de res, queso cheddar, salsa de queso cheddar y pan brioche ",
+      "120g de carne de res, queso cheddar, salsa especial y pan brioche.",
   },
 ];
-const contenedorHamburguesas = document.getElementById("contenedor-hamburguesas",);
+const contenedorHamburguesas = document.getElementById(
+  "contenedor-hamburguesas",
+);
 const botonVaciar = document.getElementById("btn-vaciar");
  
 let carrito = conocerDatosStorage();
  
 renderizarTarjeta(hamburguesas);
 renderizarCarritoHTML();
-actualizarTotal()
- 
+actualizarTotal();
  
 botonVaciar.addEventListener("click", () => {
-    if (confirm("¿Estás seguro de que quieres vaciar todo tu carrito?")) {
-        carrito = [];
-        localStorage.removeItem("carrito");
-        renderizarCarritoHTML();
-        actualizarTotal();
-        actualizarNavbar()
-    }
+  if (confirm("¿Estás seguro de que quieres vaciar todo tu carrito?")) {
+    carrito = [];
+    localStorage.removeItem("carrito");
+    renderizarCarritoHTML();
+    actualizarTotal();
+    actualizarNavbar();
+  }
 });
- 
  
 //funcion para mostrar el array de hamburguesas
 function renderizarTarjeta(productos) {
@@ -66,6 +65,8 @@ function renderizarTarjeta(productos) {
     //insertamos al elemento creado la estructura
     columnaDiv.innerHTML = `
             <div class="card text-center p-3 tienda__categoria-card">
+                <img src="${hamburguesa.img}" alt="imagen de una hamburguesa" max-width="300">
+ 
                 <div class="card-body">
                     <h5 class="card-title">${hamburguesa.nombre}</h5>
                     <p class="card-text small">${hamburguesa.descripcion}</p>
@@ -95,7 +96,7 @@ function agregarAlCarrito(id) {
   console.log("el carrito es: " + carrito);
   actualizarNavbar();
   renderizarCarritoHTML(JSON.stringify(carrito));
-  actualizarTotal()
+  actualizarTotal();
   console.log("revisar omeee");
 }
  
@@ -121,7 +122,7 @@ function renderizarCarritoHTML() {
   //junto al
   carrito.forEach((hamburguesa, index) => {
     let li = document.createElement("li");
-    
+ 
     li.innerHTML = `
     <div class="d-flex justify-content-between">
         <div>
@@ -135,8 +136,7 @@ function renderizarCarritoHTML() {
  
     listaCarrito.appendChild(li);
   });
-  actualizarTotal()
- 
+  actualizarTotal();
 }
  
 function actualizarNavbar() {
@@ -166,21 +166,20 @@ function eliminarProductos(indice) {
  
 //Funcion para actualza el total del carrito
 function actualizarTotal() {
-    //traemos el elemento y lo asignamos a total
-    const totalCarrito = document.getElementById("total-carrito");
-    //inicializamos una variable para que acumule los precios del producto
-    let acumulado = 0;
-    //recorremos el carrito con un foreach y realizamos el calculo con la cantidad por hamburguesa,
-    carrito.forEach((hamburguesa) => {
-        acumulado = acumulado + hamburguesa.precio;
-    });
+  //traemos el elemento y lo asignamos a total
+  const totalCarrito = document.getElementById("total-carrito");
+  //inicializamos una variable para que acumule los precios del producto
+  let acumulado = 0;
+  //recorremos el carrito con un foreach y realizamos el calculo con la cantidad por hamburguesa,
+  carrito.forEach((hamburguesa) => {
+    acumulado = acumulado + hamburguesa.precio;
+  });
  
-    totalCarrito.textContent = acumulado;
+  totalCarrito.textContent = acumulado;
 }
  
-function vaciarCarrito(){
-    localStorage.clear()
+function vaciarCarrito() {
+  localStorage.clear();
 }
 actualizarNavbar();
- 
  
