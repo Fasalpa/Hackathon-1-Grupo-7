@@ -1,4 +1,4 @@
-const hamburguesa = [
+const hamburguesas = [
     {
         id: 1,
         nombre: "La Colombiana",
@@ -29,3 +29,28 @@ const hamburguesa = [
         descripcion: "Hamburguesa con 120 gr. de carne 100% de res, queso cheddar, salsa de queso cheddar y pan brioche "
     }
 ]
+const contenedorHamburguesas = document.getElementById("contenedor-hamburguesas");
+
+renderizarTarjeta(hamburguesas)
+//funcion para mostrar el array de hamburguesas
+function renderizarTarjeta(productos) {
+    contenedorHamburguesas.innerHTML = "";
+    productos.forEach((hamburguesa) => {
+        let columnaDiv = document.createElement("div");
+        columnaDiv.classList.add("col-md-3")
+        columnaDiv.innerHTML = `
+            <div class="card text-center p-3 tienda__categoria-card">
+                <div class="card-body">
+                    <h5 class="card-title">${hamburguesa.nombre}</h5>
+                    <p class="card-text small">${hamburguesa.descripcion}</p>
+                    <p class="fw-bold text-dark">$${hamburguesa.precio}</p>
+                    <button class="btn btn-primary" onclick="agregarAlCarrito(${hamburguesa.id})">
+                        Agregar
+                    </button>
+                </div>
+            </div>`;
+        contenedorHamburguesas.appendChild(columnaDiv);
+
+    })
+
+}
