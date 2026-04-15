@@ -30,12 +30,23 @@ const hamburguesas = [
     }
 ]
 const contenedorHamburguesas = document.getElementById("contenedor-hamburguesas");
+const botonVaciar = document.getElementById("btn-vaciar");
 
 
 let carrito = conocerDatosStorage();
 let cantidad = 0
 renderizarTarjeta(hamburguesas)
 renderizarCarritoHTML();
+
+botonVaciar.addEventListener("click", () => {
+    if (confirm("¿Estás seguro de que quieres vaciar todo tu carrito?")) {
+        carrito = [];
+        localStorage.removeItem("carrito");
+        renderizarCarritoHTML();
+        actualizarTotal();
+    }
+});
+
 //funcion para mostrar el array de hamburguesas
 function renderizarTarjeta(productos) {
     //limpiamos el contenedor
@@ -50,7 +61,7 @@ function renderizarTarjeta(productos) {
         columnaDiv.innerHTML = `
             <div class="card text-center p-3 tienda__categoria-card">
                 <div class="card-body">
-                <img src="${hamburguesa.img}" alt="imagen de una hamburguesa" width="500" height="300">
+                <img src="${hamburguesa.img}" alt="imagen de una hamburguesa" max-width="300">
                     <h5 class="card-title">${hamburguesa.nombre}</h5>
                     <p class="card-text small">${hamburguesa.descripcion}</p>
                     <p class="fw-bold text-dark">$${hamburguesa.precio}</p>
@@ -141,4 +152,8 @@ function actualizarTotal() {
     });
 
     totalCarrito.textContent = acumulado;
+}
+
+function vaciarCarrito(){
+    localStorage.clear()
 }
