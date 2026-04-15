@@ -32,9 +32,10 @@ const hamburguesas = [
 const contenedorHamburguesas = document.getElementById("contenedor-hamburguesas");
 
 
-let carrito =conocerDatosStorage();
+let carrito = conocerDatosStorage();
 
 renderizarTarjeta(hamburguesas)
+renderizarCarritoHTML();
 //funcion para mostrar el array de hamburguesas
 function renderizarTarjeta(productos) {
     //limpiamos el contenedor
@@ -57,37 +58,57 @@ function renderizarTarjeta(productos) {
                     </button>
                 </div>
             </div>`;
-            //insertamos por el DOM el elemento creado
+        //insertamos por el DOM el elemento creado
         contenedorHamburguesas.appendChild(columnaDiv);
 
     })
 
 }
 //agregamos funcion para el boton de agregar de cada card
-function agregarAlCarrito(id){
+function agregarAlCarrito(id) {
     //creamos una variable el array y va aguardar el primer elemento que tenga el mismo id en el array con el metodo find.
     const hamburguesaAgregada = hamburguesas.find(hamburguesa => hamburguesa.id === id);
     //agrega el elemento selecciona en elarray de carrito
     carrito.push(hamburguesaAgregada)
-    console.log("la hamburguesa agregada es: " +JSON.stringify(hamburguesaAgregada))
+    console.log("la hamburguesa agregada es: " + JSON.stringify(hamburguesaAgregada))
     //guardamos el elemento agregado en el array carrito en el storage con setItem
     localStorage.setItem("carrito", JSON.stringify(carrito));
-        console.log("el carrito es: " + carrito)
+    console.log("el carrito es: " + carrito)
+    renderizarCarritoHTML(JSON.stringify(carrito))
 }
 
 
 //funcion que obtiene el carrito guardado en local storage
-function conocerDatosStorage(){
-//variable para traer los datos que haya en storage     
+function conocerDatosStorage() {
+    //variable para traer los datos que haya en storage     
     let datosStorage = localStorage.getItem("carrito");
 
     //se valida de que existan datos, sí existen se realiza parseo de JSON a objeto y lo retorna
-    if(datosStorage){
-        dato= JSON.parse(datosStorage)
-        console.log(typeof(dato))
+    if (datosStorage) {
+        dato = JSON.parse(datosStorage)
+        console.log(typeof (dato))
         return dato
-    // si esta vacio retorna array vacio de carrito
-    }else{
+        // si esta vacio retorna array vacio de carrito
+    } else {
         return []
     }
+}
+
+function renderizarCarritoHTML() {
+    const listaCarrito = document.getElementById("lista-carrito");
+    listaCarrito.innerHTML = "";
+
+    carrito.forEach((hamburguesa) => {
+    let li = document.createElement("li");
+    li.innerHTML = `
+        <div class="d-flex justify-content-between"> 
+            <div>
+                ${hamburguesa.nombre}  $${hamburguesa.precio}
+                <button type="button" class="btn-eliminar">eliminar</button>
+            </div>
+        </div>
+    `;
+    
+    listaCarrito.appendChild(li);
+});
 }
